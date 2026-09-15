@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartClass - หน้าหลัก</title>
+    <link rel="stylesheet" href="SL.css">
+</head>
+<body>
+    <div class="dashboard-container">
+<!-- Header -->
+        <header class="app-header">
+            <h2>SmartClass Dashboard</h2>
+            <div class="header-actions">
+                <button onclick="toggleDarkMode()" id="theme-btn" class="theme-btn">🌙 โหมดมืด</button>
+                <button onclick="logout()" class="logout-btn">ออกจากระบบ</button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- ส่วนที่ 1: ตารางเรียนประจำวัน -->
+            <section class="card schedule-section">
+                <div class="schedule-header">
+                    <h3>📅 ตารางเรียนประจำวัน (<span id="current-day-name">วันอังคาร</span>)</h3>
+                    <div class="schedule-controls">
+                    <button onclick="addRow()" class="btn-control">+ เพิ่มแถว</button>
+                    <button onclick="deleteRow()" class="btn-control btn-delete-row">- ลบแถว</button>
+                  </div>
+                </div>
+
+                <table class="schedule-table" id="daily-schedule-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 35%;">เวลา</th>
+                            <th id="today-column-header">วันอังคาร (วิชาเรียน)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="schedule-body">
+                        <!-- รายการคาบเรียนจะถูกเรนเดอร์ผ่าน JS -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- ส่วนที่ 2: กำหนดส่งงาน (Tasks) -->
+            <section class="card task-section">
+                <h3>📝 กำหนดส่งงาน (Tasks)</h3>
+                
+                <form id="task-form" onsubmit="addTask(event)" class="task-form">
+                    <select id="task-subject" required>
+                        <option value="">-- เลือกวิชา --</option>
+                        <option value="คณิตศาสตร์">คณิตศาสตร์</option>
+                        <option value="วิทยาศาสตร์">วิทยาศาสตร์</option>
+                        <option value="ภาษาไทย">ภาษาไทย</option>
+                        <option value="อังกฤษ">อังกฤษ</option>
+                        <option value="ฟิสิกส์">ฟิสิกส์</option>
+                        <option value="เคมี">เคมี</option>
+                        <option value="ชีววิทยา">ชีววิทยา</option>
+                        <option value="สังคมศึกษา">สังคมศึกษา</option>
+                        <option value="ศิลปะ">ศิลปะ</option>
+                    </select>
+                    <input type="text" id="task-title" placeholder="ชื่อภาระงาน / การบ้าน" required>
+                    <input type="datetime-local" id="task-datetime" required>
+                    <button type="submit" class="add-btn">เพิ่มงาน</button>
+                </form>
+
+                <ul id="task-list" class="task-list">
+                    <!-- รายการงาน -->
+                </ul>
+            </section>
+
+            <!-- ส่วนที่ 3: ปฏิทินแสดงกำหนดส่งงาน (Calendar) -->
+            <section class="card calendar-section">
+                <div class="calendar-header-title">
+                    <h3>📅 ปฏิทินกำหนดส่งงาน</h3>
+                    <div class="calendar-nav">
+                        <button onclick="changeMonth(-1)">&lt;</button>
+                        <span id="calendar-month-year"></span>
+                        <button onclick="changeMonth(1)">&gt;</button>
+                    </div>
+                </div>
+                <div class="calendar-grid-header">
+                    <div>อา</div><div>จ</div><div>อ</div><div>พ</div><div>พฤ</div><div>ศ</div><div>ส</div>
+                </div>
+                <div id="calendar-days" class="calendar-grid-days">
+                    <!-- วันที่ในปฏิทินถูกสร้างจาก JS -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
