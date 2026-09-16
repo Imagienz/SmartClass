@@ -267,3 +267,51 @@ function loadTheme() {
         if (themeBtn) themeBtn.textContent = "☀️ โหมดสว่าง";
     }
 }
+
+// 1. ฟังก์ชันดึงรายชื่อวิชามาใส่ใน Dropdown
+function updateSubjectDropdown() {
+    const subjectSelect = document.querySelector("#subject-select") || document.querySelector("select"); 
+    if (!subjectSelect) return;
+
+    const timetableData = JSON.parse(localStorage.getItem("timetable")) || {};
+    const activeSubjects = new Set();
+    
+    Object.values(timetableData).forEach(daySchedule => {
+        if (Array.isArray(daySchedule)) {
+            daySchedule.forEach(slot => {
+                if (slot && slot.subject && slot.subject.trim() !== "") {
+                    activeSubjects.add(slot.subject.trim());
+                }
+            });
+        } else if (typeof daySchedule === 'object' && daySchedule !== null) {
+            Object.values(daySchedule).forEach(slot => {
+                if (slot && slot.subject && slot.subject.trim() !== "") {
+                    activeSubjects.add(slot.subject.trim());
+                }
+            });
+        }
+    });
+
+    subjectSelect.innerHTML = '<option value="">-- เลือกวิชา --</option>';
+
+    activeSubjects.forEach(subjectName => {
+        const option = document.createElement("option");
+        option.value = subjectName;
+        option.textContent = subjectName;
+        subjectSelect.appendChild(option);
+    });
+}
+
+// 2. สั่งให้อัปเดตวิชาทันทีเมื่อเปิดหน้าเว็บขึ้นมา
+document.addEventListener("DOMContentLoaded", function () {
+    updateSubjectDropdown();
+});
+
+// 3. (ดักจับจุดที่ 3) อัปเดต Dropdown อัตโนมัติทุกครั้งที่มีการกด Save หรือ Delete ข้อมูลลง localStorage
+const originalSetItem = localStorage.setItem;
+localStorage.setItem = function (key, value) {
+    originalSetItem.apply(this, arguments);
+    if (key === "timetable") {
+        updateSubjectDropdown(); // อัปเดตรายชื่อวิชาทันทีที่มีการแก้ไขตารางเรียน
+    }
+};
